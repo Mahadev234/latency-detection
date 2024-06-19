@@ -20,10 +20,5 @@ services:
     environment:
       - WS_SERVER=websocket-server 
       - WS_PORT=8081
-      - TARGET_WEBSITE=web:80
-  web:
-    build:
-      context: .
-      dockerfile: Dockerfile.nginx
-    ports:
-      - "8080:80"
+      - TARGET_WEBSITE=0.0.0.0:80
+
