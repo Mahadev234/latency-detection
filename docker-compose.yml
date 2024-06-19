@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  websocket-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.websocket  
+    ports:
+      - "8081:8081" 
+    environment:
+      - WS_PORT=8081 
+    
+
+  latency-check:
+    build:
+      context: .
+      dockerfile: Dockerfile.latency  
+    depends_on:
+      - websocket-server 
+    environment:
+      - WS_SERVER=websocket-server 
+      - WS_PORT=8081
+      - TARGET_WEBSITE=web:80
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    ports:
+      - "8080:80"
