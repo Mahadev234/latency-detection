@@ -34,7 +34,7 @@ def tcp_handshake_latency(host, port):
 async def main():
     websocket_uri = f"ws://{os.environ.get('WS_SERVER', 'websocket-server')}:{os.environ.get('WS_PORT', 8081)}"
     target_website = os.environ.get("TARGET_WEBSITE", "node-app:8080")
-    test_url = f"http://{target_website}"
+    test_url = f"https://{target_website}"
 
     websocket_latencies = await websocket_latency_test(websocket_uri)
     parsed_url = urlparse(test_url)
