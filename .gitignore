@@ -1,1 +1,3 @@
 venv/
+demoApp/node_modules/
+demoApp/package-lock.json

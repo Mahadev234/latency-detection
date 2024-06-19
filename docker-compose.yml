@@ -1,24 +1,46 @@
 version: '3.8'
-
 services:
   websocket-server:
     build:
       context: .
-      dockerfile: Dockerfile.websocket  
+      dockerfile: Dockerfile.websocket
     ports:
-      - "8081:8081" 
+      - "8081:8081"
     environment:
-      - WS_PORT=8081 
-    
+      - WS_PORT=8081
+    networks:
+      - app-network
 
   latency-check:
     build:
       context: .
-      dockerfile: Dockerfile.latency  
+      dockerfile: Dockerfile.latency
     depends_on:
-      - websocket-server 
+      - websocket-server
+      - node-app
     environment:
-      - WS_SERVER=websocket-server 
+      - WS_SERVER=websocket-server
       - WS_PORT=8081
-      - TARGET_WEBSITE=0.0.0.0:80
+      - TARGET_WEBSITE=node-app:8080
+    networks:
+      - app-network
 
+  node-app:
+    build:
+      context: ./demoApp
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - websocket-server
+    volumes:
+      - node_modules:/usr/src/app/node_modules
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  node_modules:
